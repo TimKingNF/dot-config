@@ -1,7 +1,8 @@
 link: \
   link-tmux \
   link-py \
-  link-java
+  link-java \
+  link-git
 
 link-osx-software: \
   link-rime
@@ -19,4 +20,7 @@ link-java:
 
 link-rime:
 	ln -sf ~/.config/Rime ~/Library/Rime
+
+link-git:
+	ln -sf ~/.config/git/gitconfig ~/.gitconfig
 

@@ -1,0 +1,17 @@
+[user]
+	email = timking
+	name = timking@foxmail.com
+
+[core]
+	editor = nvim
+	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	excludesfile = ~/.config/git/gitignore
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[init]
+	templatedir = ~/.config/git/git-templates
