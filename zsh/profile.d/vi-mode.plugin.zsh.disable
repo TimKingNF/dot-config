@@ -1,0 +1,38 @@
+# Custom plugin for zsh
+#
+# Vi-mode configrution
+#
+# Author: TimKing <timking.nf@foxmail.com>
+# Date:   Sat, Jun 27  17:37:12 GMT+8 2020
+#
+
+# 模式切换时 光标切换的延迟, 0.1m, 如果终端显示有问题, 就调大
+export KEYTIMEOUT=1
+
+bindkey '^K' up-history
+bindkey '^J' down-history
+# bindkey '^h' backward-delete-char  # 回退一个字符
+# bindkey '^w' backward-kill-word  # 回退一个单词
+# # bindkey '^r' history-incremental-search-backward  # 由 fzf 替换
+
+# # Edit line in vim with ctrl-e, 插入模式下
+# autoload edit-command-line; zle -N edit-command-line
+# bindkey '^e' edit-command-line
+
+
+# 通过光标的变化来表示当前的vi模式, 但是在 nvim terminal 模式下, 无法改变光标
+# 通过 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(vi_mode) 来表示
+function zle-keymap-select {
+  if [[ $KEYMAP == vicmd ]] || [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+    # printf '\e[1 q'
+  elif [[ $KEYMAP == main ]] || [[ $KEYMAP == viins ]] || [[ $KEYMAP = '' ]] || [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+    # printf '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+
+# Start with beam shape cursor on zsh startup and after every command.
+zle-line-init() { zle-keymap-select 'beam'}
+

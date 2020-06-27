@@ -2,7 +2,8 @@ link: \
   link-tmux \
   link-py \
   link-java \
-  link-git
+  link-git \
+  link-zsh
 
 link-osx-software: \
   link-rime
@@ -24,3 +25,7 @@ link-rime:
 link-git:
 	ln -sf ~/.config/git/gitconfig ~/.gitconfig
 
+link-zsh:
+	ln -sf ~/.config/zsh/p10k.zsh ~/.p10k.zsh
+	[[ ! -f ./zsh/personal.zsh ]] && touch ./zsh/personal.zsh
+	ln -sf ~/.config/zsh/zshrc ~/.zshrc

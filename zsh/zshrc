@@ -1,0 +1,139 @@
+# zsh configuration file
+#
+# Author: TimKing <timking.nf@foxmail.com>
+# Date:   Sat, Jun 27  16:31:01 GMT+8 2020
+#
+
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+###### Environments ######
+
+# Custom platform
+export CUSTOM_OS=`${HOME}/.config/utils/os.sh`
+
+# Path to your oh-my-zsh installation.
+export ZSH="${HOME}/.oh-my-zsh"
+export ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"
+
+# TERM 不要自己设置. 由终端输出决定. 需要在 iterm2 设置为 xterm-256color
+# export TERM=xterm-256color
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME=powerlevel10k/powerlevel10k
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# use case-sensitive completion.
+# 使用大小写区分的自动补全
+CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
+# Define how often to auto-update (in days).
+# 定义zsh更新频率
+export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Enable command auto-correction.
+# 自动修正命令行错误
+ENABLE_CORRECTION="true"
+
+# Display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Configure history stamp format
+HIST_STAMPS="yyyy-mm-dd"
+
+source $ZSH/oh-my-zsh.sh
+
+
+###### ZPlug: Plugin Manager ######
+
+if [[ ! -d "${ZPLUG_HOME}" ]]; then
+  if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    # If we can't get zplug, it'll be a very sobering shell experience. To at
+    # least complete the sourcing of this file, we'll define an always-false
+    # returning zplug function.
+    if [[ $? != 0 ]]; then
+      function zplug() {
+        return 1
+      }
+    fi
+  fi
+  export ZPLUG_HOME=~/.zplug
+fi
+
+if [[ -d "${ZPLUG_HOME}" ]]; then
+  source "${ZPLUG_HOME}/init.zsh"
+fi
+
+zplug 'plugins/git', from:oh-my-zsh, if:'which git'
+zplug romkatv/powerlevel10k, as:theme, depth:1
+zplug 'zsh-users/zsh-completions'
+zplug 'zsh-users/zsh-autosuggestions'
+zplug 'zsh-users/zsh-history-substring-search'
+# 终端命令高亮插件
+zplug 'zsh-users/zsh-syntax-highlighting', defer:2
+# 需要先安装 autojump
+zplug "plugins/autojump", from:oh-my-zsh
+# zplug "plugins/vi-mode", from:oh-my-zsh
+
+if ! zplug check; then
+  zplug install
+fi
+
+zplug load
+
+
+
+###### Local custom plugins ######
+for item in $(ls -1 ${HOME}/.config/profile.d/*.plugin.zsh); do
+  [ -e "${item}" ] && source "${item}"
+done
+
+
+###### Software configuration ######
+[[ ! -f ~/.config/zsh/software.zsh ]] || source ~/.config/zsh/software.zsh
+
+
+###### Powerlevel10k configuration ######
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+###### User profiles ######
+[[ ! -f ~/.config/zsh/personal.zsh ]] || source ~/.config/zsh/personal.zsh
