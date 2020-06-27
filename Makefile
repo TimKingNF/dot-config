@@ -1,13 +1,10 @@
-.PHONY: \
-  link \
-  link-tmux \
-  link-py \
-  link-java
-
 link: \
   link-tmux \
   link-py \
   link-java
+
+link-osx-software: \
+  link-rime
 
 link-tmux:
 	mkdir -p ~/.tmux/plugins
@@ -19,3 +16,7 @@ link-py:
 
 link-java:
 	ln -sf ~/.config/java/m2 ~/.m2
+
+link-rime:
+	ln -sf ~/.config/Rime ~/Library/Rime
+
