@@ -46,7 +46,7 @@
       background_jobs         # presence of background jobs
       direnv                  # direnv status (https://direnv.net/)
       virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
-      # anaconda              # conda environment (https://conda.io/)
+      anaconda                # conda environment (https://conda.io/)
       pyenv                   # python environment (https://github.com/pyenv/pyenv)
       # goenv                 # go environment (https://github.com/syndbg/goenv)
       nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
@@ -82,7 +82,7 @@
       time                    # current time
       # =========================[ Line #2 ]=========================
       newline
-      public_ip               # public IP address
+      # public_ip               # public IP address
       proxy                   # system-wide http/https/ftp proxy
       battery                 # internal battery
       # example               # example user-defined segment (see prompt_example function below)

@@ -25,7 +25,6 @@ alias ll="ls -l"
 alias l.='ls -d .*'
 alias cp='cp -v'
 alias mv='mv -v'
-alias rm='rm -v'
 alias mkdir='mkdir -pv'
 alias less='less -FSRXc'
 alias ssh='ssh -A'
@@ -38,7 +37,8 @@ alias scp="scp -p"
 
 alias vper="${EDITOR:-edit} ~/.config/zsh/personal.zsh"
 alias sper=". ~/.config/zsh/personal.zsh"
-
+alias brash='~/.config/zsh/brash'
+alias rm='brash -d -v'  # replace rm
 
 ###### OSX alias ######
 

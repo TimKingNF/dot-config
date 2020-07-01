@@ -78,7 +78,7 @@ ii() {
   echo -e "\nUsers logged on:           " ; w -h
   echo -e "\nCurrent date:              " ; date
   echo -e "\nMachine stats:             " ; uptime
-  echo -e "\nPublic facing IP Address:  " ; myip
+  # echo -e "\nPublic facing IP Address:  " ; myip
   echo
 }
 

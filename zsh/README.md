@@ -19,12 +19,8 @@ curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/instal
 ## install software
 
 ```bash
+# linux
+
+# osx
 brew install git autojump fzf tmux ranger nvim
 ```
-
-Install extral software if use osx
-
-```bash
-
-```
-
