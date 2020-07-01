@@ -1,3 +1,5 @@
 *.userdb/
 build/
 sync/
+user.yaml
+

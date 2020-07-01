@@ -78,3 +78,5 @@ QQ邮箱	qqyzxl
 Vim	vim
 阿里	ali
 阿里云	ali
+Devops	devops
+HBase	hbase

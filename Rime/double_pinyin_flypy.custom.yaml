@@ -29,7 +29,7 @@ patch:
     #- charset_filter@gbk
     # - single_char_filter
   engine/processors:
-    - ascii_composer
+    # - ascii_composer  # 禁用英文模式
     - recognizer
     - key_binder
     - speller

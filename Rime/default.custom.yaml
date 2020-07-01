@@ -15,11 +15,11 @@ patch:
   ascii_composer: # 设置caps、shift、control等键的作用
     good_old_caps_lock: false # 若为true，caps只切换大小写
     switch_key:
-      Shift_L: commit_text  # 按shift之后候选词直接输入并切换为英文
+      Shift_L: noop  # commit_text 按shift之后候选词直接输入并切换为英文
       Shift_R: noop
       Control_L: noop
       Control_R: noop
-      Caps_Lock: commit_code  # 切换为英文
+      Caps_Lock: noop  # 切换为英文
       Eisu_toggle: clear
   key_binder/bindings: # 设置哪些键可以翻页，需要哪个取消注释即可
     # - { when: composing, accept: Tab, send: Page_Up } # Tab 翻页
@@ -45,7 +45,7 @@ patch:
     # - {accept: comma, send: Page_Up, when: paging}
     # - {accept: period, send: Page_Down, when: has_menu}
     # - {accept: "Control+Shift+1", select: .next, when: always}
-    # - {accept: "Control+Shift+2", toggle: ascii_mode, when: always}
+    # - {accept: "Shift+space", toggle: ascii_mode, when: always}
     # - {accept: "Control+Shift+3", toggle: full_shape, when: always}
     # - {accept: "Control+Shift+4", toggle: simplification, when: always}
     # - {accept: "Control+Shift+5", toggle: extended_charset, when: always}
