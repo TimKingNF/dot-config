@@ -3,7 +3,8 @@ link: \
   link-py \
   link-java \
   link-git \
-  link-zsh
+  link-zsh \
+  link-nvim
 
 link-osx-software: \
   link-rime
@@ -15,6 +16,8 @@ link-tmux:
 
 link-py:
 	ln -sf ~/.config/py/pip ~/.pip
+	ln -sf ~/.config/py/jupyter ~/.jupyter
+	ln -sf ~/.config/py/conda/condarc ~/.condarc
 
 link-java:
 	ln -sf ~/.config/java/m2 ~/.m2
@@ -29,3 +32,6 @@ link-zsh:
 	ln -sf ~/.config/zsh/p10k.zsh ~/.p10k.zsh
 	[[ ! -f ./zsh/personal.zsh ]] && touch ./zsh/personal.zsh
 	ln -sf ~/.config/zsh/zshrc ~/.zshrc
+
+link-nvim:
+	ln -sf ~/.config/nvim/idea.vimrc ~/.ideavimrc
