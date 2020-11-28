@@ -1,0 +1,10 @@
+% navi official
+
+# 下载官方的 cheats 表
+navi repo add denisidoro/cheats
+
+# 浏览官方维护的 cheats 源
+navi repo browse
+
+# Read --help message
+navi --help

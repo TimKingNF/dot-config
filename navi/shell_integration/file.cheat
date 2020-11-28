@@ -1,0 +1,38 @@
+% shell file operation
+
+# 复制保留权限、修改时间等
+cp -p
+
+# 递归复制
+cp -R
+
+# 包括软链接的内容也一并复制
+cp -P
+
+# same as -pPR
+cp -a
+
+# 显示文件某一行
+sed -n <line>p <file>
+
+# 删除文件某一行
+sed -d<line> <file>
+
+# 随机抽取文件的若干行
+shuf -n<numbers> <file>
+
+# 创建一个充满数据的大文件
+; if （input file）代表输入文件/目录，如果不指定 if，默认就会从 stdin 中读取输入
+; of （output file）代表输出文件/目录，如果不指定 of，默认就会将 stdout 作为默认输出
+; bs 代表每次读入的block大小, 1M
+; count：读取的block个数, bs*count=文件大小
+; /dev/zero 是Linux提供的一个特殊的字符设备，它的特点是可以永远读该文件，每次读取的结果都是二进制0
+dd if=/dev/zero of=<filename> bs=<block-size> count=<block-counts>
+
+# 创建一个具有偏移的大文件
+; seek：跳过输出文件中指定大小的部分，并不实际写入
+dd if=/dev/zero of=<filename> bs=<block-size> count=<block-counts> seek=<seek>
+
+# 将文件缩减或扩展至指定大小, 文件不存在则创建, 超出则丢失, 小于则补0
+truncate -s <file-size> <filename>
+
