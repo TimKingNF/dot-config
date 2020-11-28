@@ -19,25 +19,25 @@ _name_=${0##*/}
 # get Trash variable from Devices
 # while read -r d ; do
 
-	# # get partition
-	# read -ra U < <(blkid $d)
+    # # get partition
+    # read -ra U < <(blkid $d)
 
-	# # check if the partition mounted
-	# read -ra D < <(lsblk -ln -o mountpoint $d)
+    # # check if the partition mounted
+    # read -ra D < <(lsblk -ln -o mountpoint $d)
 
-	# # get partition UUID
-	# eval "${U[1]}"
+    # # get partition UUID
+    # eval "${U[1]}"
 
-	# # if UUID empty its a external disk or a usb
-	# [ "$UUID" ] && {
-		# # if can find UUID id not a system Partititon
-		# # and check if its mounted
-		# [ -z "$(grep "$UUID" /etc/fstab)" ] && [ "${D}" ] && {
-			# case "$PWD" in
-				# ${D}* ) _TRASH_="$D/.Trash" ;;
-			# esac
-		# }
-	# }
+    # # if UUID empty its a external disk or a usb
+    # [ "$UUID" ] && {
+        # # if can find UUID id not a system Partititon
+        # # and check if its mounted
+        # [ -z "$(grep "$UUID" /etc/fstab)" ] && [ "${D}" ] && {
+            # case "$PWD" in
+                # ${D}* ) _TRASH_="$D/.Trash" ;;
+            # esac
+        # }
+    # }
 # done < <(ls -1 /dev/sd[a-z][1-9])
 #}}}
 
@@ -53,8 +53,8 @@ _TINFO_="$_TRASH_/info"
 # MAKE TRASH FILES #
 #------------------#{{{
 _mk_trash_(){
-	[ -d "$_TFILES_" ] || mkdir -p "$_TFILES_"
-	[ -d "$_TINFO_" ] || mkdir -p "$_TINFO_"
+    [ -d "$_TFILES_" ] || mkdir -p "$_TFILES_"
+    [ -d "$_TINFO_" ] || mkdir -p "$_TINFO_"
 }
 #}}}
 
@@ -74,45 +74,45 @@ _er_(){ ( >&2 printf "%s: %b\n" "${_name_^}" "$1" ) ; exit 2 ;}
 # REMOVE FILE #
 #-------------#{{{
 _remove_(){
-local i I
+    local i I
 
-for i in "${_list_[@]:$F}" ; do
-	local _file_=${i}
-	local _path_=$(realpath -- "$_file_" 2> /dev/null)
-	local _file_name_=${_path_##*/}
-	local _file_path_=${_path_%/*}
-    local size count
+    for i in "${_args_[@]:$F}" ; do
+        local _file_=${i}
+        local _path_=$(realpath -- "$_file_" 2> /dev/null)
+        local _file_name_=${_path_##*/}
+        local _file_path_=${_path_%/*}
+        local size count
+        
+        # check for file existing
+        [ -e "$_file_" ] || _er_ "$_file_: No such file or Directory."
 
-    # check for file existing
-    [ -e "$_file_" ] || _er_ "$_file_: No such file or Directory."
+        # get file size
+        read -a size < <(du -hc "$_file_" 2> /dev/null)
 
-    # get file size
-    read -a size < <(du -hc "$_file_" 2> /dev/null)
+        # get count if there is any double
+        read count < <(ls -1 $_TFILES_/${_file_name_}* 2> /dev/null | sort -V | awk -F '[()]' '{if($2)line=$2}END{print line}')
+        
+        [ "$count" ] && {
+            ((count++))
+            _file_name_="${_file_name_}(${count})"
+        } || {
+            [ -e "$_TFILES_/$_file_name_" ] && _file_name_="${_file_name_}(1)"
+        }
 
-    # get count if there is any double
-    read count < <(ls -1 $_TFILES_/${_file_name_}* 2> /dev/null | sort -V | awk -F '[()]' '{line=$2}END{print line}')
+        test -w "$_file_" || _er_ "Can't Delete '$_file_' Permission denied"
 
-    [ "$count" ] && {
-        ((count++))
-        _file_name_="${_file_name_}(${count})"
-    } || {
-        [ -e "$_TFILES_/$_file_name_" ] && _file_name_="${_file_name_}(1)"
-    }
+        ( mv -f -- "$_file_" "$_TFILES_/$_file_name_" 2> /dev/null ) && {
+            printf "[Trash Info]\n"                    > "$_TINFO_/$_file_name_.trashinfo"
+            #printf "DeletionDate=%(%F)TT%(%T)T\n"     >> "$_TINFO_/$_file_name_.trashinfo"
+            printf "DeletionDate=$(date "+%Y-%m-%dT%H:%M:%S")\n"     >> "$_TINFO_/$_file_name_.trashinfo"
+            # printf "Path=%s\n" "$_file_path_/$_file_" >> "$_TINFO_/$_file_name_.trashinfo"
+            printf "Path=%s\n" "$_file_path_/$_file_name_" >> "$_TINFO_/$_file_name_.trashinfo"
+        } || {
+            _er_ "Delele [ERROR] '$_file_'"
+        }
 
-    test -w "$_file_" || _er_ "Can't Delete '$_file_' Permission denied"
-
-    ( mv -f -- "$_file_" "$_TFILES_/$_file_name_" 2> /dev/null ) && {
-        printf "[Trash Info]\n"                    > "$_TINFO_/$_file_name_.trashinfo"
-        #printf "DeletionDate=%(%F)TT%(%T)T\n"     >> "$_TINFO_/$_file_name_.trashinfo"
-        printf "DeletionDate=$(date "+%Y-%m-%dT%H:%M:%S")\n"     >> "$_TINFO_/$_file_name_.trashinfo"
-        # printf "Path=%s\n" "$_file_path_/$_file_" >> "$_TINFO_/$_file_name_.trashinfo"
-        printf "Path=%s\n" "$_file_path_/$_file_name_" >> "$_TINFO_/$_file_name_.trashinfo"
-    } || {
-        _er_ "Delele [ERROR] '$_file_'"
-    }
-
-    [ "$_VERBOSE_" ] && _msg_ "Delete [$size] '$_file_'"
-done
+        [ "$_VERBOSE_" ] && _msg_ "Delete [$size] '$_file_'"
+    done
 }
 #}}}
 
@@ -120,14 +120,18 @@ done
 # LIST FILES #
 #------------#{{{
 _list_(){
-(ls $_TINFO_/* &> /dev/null) || _er_ "Trash [EMPTY]"
+    _check_empty_
 
-for i in $_TINFO_/* ; do
-	local _file_=$(awk -F = '/^Path=/{print $2}' "$i")
-	local _date_=$(awk -F = '/^DeletionDate=/{sub("T"," ",$2); print $2}' "$i")
+    for name in $(ls -a $_TINFO_) ; do
+        if [ $name == "." ] || [ $name == ".." ]; then 
+            continue
+        fi
+        local _filename_="$_TINFO_/$name" 
+        local _file_=$(awk -F = '/^Path=/{print $2}' "$_filename_")
+        local _date_=$(awk -F = '/^DeletionDate=/{sub("T"," ",$2); print $2}' "$_filename_")
 
-    _msg_ "List [$_date_] '$_file_'"
-done
+        _msg_ "List [$_date_] '$_file_'"
+    done
 }
 #}}}
 
@@ -135,16 +139,28 @@ done
 # CLEAN TRASH #
 #-------------#{{{
 _clean_(){
-(ls $_TINFO_/* &> /dev/null) || _er_ "Trash [EMPTY]"
+    _check_empty_
 
-read -p $'clear sure?\n[Input 'y' or 'Y' to confirm. && Input 'n' to cancel.]' confirm
-if [ $confirm == 'y' ] || [ $confirm == 'Y' ]; then
-  _msg_ "Clean [INFO]"
-  rm -rf -- $_TINFO_/*
+    read -p $'clear sure?\n[Input 'y' or 'Y' to confirm. && Input 'n' to cancel.]' confirm
+    if [ $confirm == 'y' ] || [ $confirm == 'Y' ]; then
+    local tinfo=""
+    local tfiles=""
+    for name in $(ls -a $_TINFO_) ; do
+        if [ $name == "." ] || [ $name == ".." ]; then 
+            continue
+        fi
+        local _filename_="" 
 
-  _msg_ "Clean [FILE]"
-  rm -rf -- $_TFILES_/*
-fi
+        tinfo+=" $_TINFO_/$name"
+        tfiles+=" $_TFILES_/$name"
+    done
+
+    _msg_ "Clean [INFO]"
+    rm -rf -- $tinfo
+
+    _msg_ "Clean [FILE]"
+    rm -rf -- $tfiles
+    fi
 }
 #}}}
 
@@ -152,12 +168,16 @@ fi
 # LIST FILES FOR BRASH RETORE  #
 #------------------------------#{{{
 _list_files_(){
-for i in $_TINFO_/* ; do
-	local _file_=$(awk -F = '/^Path=/{print $2}' "$i")
-	local _date_=$(awk -F = '/^DeletionDate=/{sub("T"," ",$2); print $2}' "$i")
-	i=${i##*/}
-    printf "'%s' '%s' OFF " "${i%.*}" "$_file_ $_date_"
-done
+    for name in $(ls -a $_TINFO_) ; do
+        if [ $name == "." ] || [ $name == ".." ]; then 
+            continue
+        fi
+        local _filename_="$_TINFO_/$name" 
+        local _file_=$(awk -F = '/^Path=/{print $2}' "$_filename_")
+        local _date_=$(awk -F = '/^DeletionDate=/{sub("T"," ",$2); print $2}' "$_filename_")
+        i=${name##*/}
+        printf "'%s' '%s' OFF " "${i%.*}" "$_file_ $_date_"
+    done
 }
 #}}}
 
@@ -165,31 +185,33 @@ done
 # RESTORE FILE #
 #--------------#{{{
 _restore_(){
-(ls $_TINFO_/* &> /dev/null) || _er_ "Trash [EMPTY]"
+    _check_empty_
 
-read LINES COLUMNS < <(stty size)
+    read LINES COLUMNS < <(stty size)
 
-_RF_="${_list_[@]:$F}"
+    _RF_="${_args_[@]:$F}"
 
-[ "$_RF_" ] || {
-	DIALOG_TTY=1
-	_RF_=$(eval "dialog --stdout --title 'Brash Restore' --checklist 'Pick Files (Accept Multiple) :' $LINES $COLUMNS $(($LINES - 8)) $(_list_files_)")
-}
+    [ "$_RF_" ] || {
+        DIALOG_TTY=1
+        _RF_=$(eval "dialog --stdout --title 'Brash Restore' --checklist \
+'Pick Files (Accept Multiple) :' $LINES $COLUMNS $(($LINES - 8)) $(_list_files_)")
+        clear
+    }
 
-[ "$_RF_" ] && {
-	for i in ${_RF_[@]}; do
-		local _file_=$(awk -F = '/^Path=/{print $2}' "$_TINFO_/$i.trashinfo")
+    [ "$_RF_" ] && {
+        for i in ${_RF_[@]}; do
+            local _file_=$(awk -F = '/^Path=/{print $2}' "$_TINFO_/$i.trashinfo")
 
-        test -w "$_TINFO_/$i.trashinfo" || _er_ "Can't Restore '$_file_' Permission denied"
+            test -w "$_TINFO_/$i.trashinfo" || _er_ "Can't Restore '$_file_' Permission denied"
 
-        test -f "$_file_" && _file_="${_file_}(1)"
+            test -f "$_file_" && _file_="${_file_}(1)"
 
-		mv -f -- "$_TFILES_/$i" "$_file_" 2> /dev/null
-        rm -f -- "$_TINFO_/$i.trashinfo"  2> /dev/null
+            mv -f -- "$_TFILES_/$i" "$_file_" 2> /dev/null
+            rm -f -- "$_TINFO_/$i.trashinfo"  2> /dev/null
 
-		[ "$_VERBOSE_" ] && _msg_ "Restore '$_file_'"
-	done
-}
+            [ "$_VERBOSE_" ] && _msg_ "Restore '$_file_'"
+        done
+    }
 }
 #}}}
 
@@ -203,6 +225,22 @@ _size_(){
     read count < <(ls -1 "$_TRASH_"/* | wc -l)
 
     _msg_ "Size [$size], Files [$count]"
+}
+#}}}
+
+#-------------#
+# Check Empty #
+#-------------#{{{
+_check_empty_() {
+    local size=0
+
+    for name in $(ls -a $_TINFO_) ; do
+    if [ $name == "." ] || [ $name == ".." ]; then 
+        continue
+    fi
+    let size++
+    done
+    [ $size > 0 ] || _er_ "Trash [EMPTY]"
 }
 #}}}
 
@@ -277,7 +315,7 @@ done
 # RUN MAIN FUNCTION #
 #-------------------#{{{
 # this the only way i found to deal with spaces inside filename
-for i in "$@"; { _list_+=( "$i" ) ;}
+for i in "$@"; { _args_+=( "$i" ) ;}
 _main_ $@
 #}}}
 

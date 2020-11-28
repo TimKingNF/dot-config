@@ -18,11 +18,14 @@ LSCOLORS='CxfxcxdxbxegedabagGxGx'
 
 ###### Command enhancements aliases ######
 
-alias edit='vim'
+alias edit='nvim'
+alias code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 
 alias ls='ls -GFh'
 alias ll="ls -l"
-alias l.='ls -d .*'
+# 只显示隐藏文件
+alias l.='ls -d .'
+# 复制时保留限和修改时间
 alias cp='cp -v'
 alias mv='mv -v'
 alias mkdir='mkdir -pv'
@@ -30,8 +33,8 @@ alias less='less -FSRXc'
 alias ssh='ssh -A'
 alias ping='ping -c 5'
 alias wget='wget -c'
-alias lc='colorls'
-alias lca='colorls -al'
+# alias lc='colorls'
+# alias lca='colorls -al'
 alias scp="scp -p"
 
 
@@ -40,8 +43,19 @@ alias sper=". ~/.config/zsh/personal.zsh"
 alias brash='~/.config/zsh/brash'
 alias rm='brash -d -v'  # replace rm
 
+
+###### Software ######
+
+alias vim="nvim"
+alias vi="nvim"
+
+
 ###### OSX alias ######
 
 if [[ $CUSTOM_OS = "osx" ]]; then
-  alias date="gdate"  # use gnu date replace date
+
+alias date="gdate"  # use gnu date replace date
+alias clearcp='printf "\e]1337;ClearCapturedOutput\e\\"'  # 告诉iterm2清理 CapturedOutput
+alias sed="gsed"  # use gnu sed replace osx sed
+
 fi

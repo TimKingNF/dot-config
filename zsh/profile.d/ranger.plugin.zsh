@@ -12,11 +12,11 @@ export RANGER_CACHE=${HOME}/.cache/rangerdir
 
 alias ra='ranger --choosedir=${RANGER_CACHE};cd "$(cat ${RANGER_CACHE})"'
 
-rg() {
-    if [ -z "$RANGER_LEVEL" ]
-    then
-        ranger
-    else
-        exit
-    fi
-}
+# rg() {
+#     if [ -z "$RANGER_LEVEL" ]
+#     then
+#         ranger
+#     else
+#         exit
+#     fi
+# }

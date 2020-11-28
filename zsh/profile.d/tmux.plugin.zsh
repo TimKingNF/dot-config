@@ -12,6 +12,7 @@ if [ $TMUX ];then
     # export TERM=tmux-256color
     export TERM=screen-256color
     PATH=${HOME}/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin/:/bin:/sbin
+    unset LDFLAGS CPPFLAGS
 fi
 
 
