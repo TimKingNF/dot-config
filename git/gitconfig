@@ -1,17 +1,41 @@
 [user]
-	email = timking
-	name = timking@foxmail.com
+    email = timking
+    name = timking.nf@gmail.com
 
 [core]
-	editor = nvim
-	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	excludesfile = ~/.config/git/gitignore
+    editor = nvim
+    whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+    excludesfile = ~/.config/git/gitignore
 
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 
 [init]
-	templatedir = ~/.config/git/git-templates
+    templatedir = ~/.config/git/git-templates
+
+[credential]
+    helper = store
+
+### Proxy
+[http "https://github.com"]
+    proxy = socks5://127.0.0.1:7890
+
+[https "https://github.com"]
+    proxy = socks5://127.0.0.1:7890
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[color "status"]
+    added = green bold
+    changed = yellow bold
+    untracked = red bold
+
+### Tools
