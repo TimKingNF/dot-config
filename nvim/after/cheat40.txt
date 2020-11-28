@@ -1,0 +1,144 @@
+按 q 关闭窗口, 按 <Tab> 恢复原来的焦点
+About {{{2
+  注意：非默认支持版本, 有个人修改
+
+  缩写符号说明:
+
+  »      向前/右
+  «      向后/左
+  WORD   Space-delimited word
+
+  按键符号说明:
+
+  \      Leader (see `<leader>`)
+  ‹r›    A register (", *, 0, 1, …)
+         See `registers`
+  ‹Move› A motion or a text object
+         See `$VIMRUNTIME/doc/motion.txt`
+         See `text-objects`
+  ‹P›    A regular expression (pattern)
+         See `$VIMRUNTIME/doc/pattern.txt`
+  ‹Cmd›  An Ex command
+         See `$VIMRUNTIME/doc/cmdline.txt`
+  ‹Var›  A variable or option name
+         See `variables`
+         See `$VIMRUNTIME/doc/options.txt`
+  ‹n›    可选数字
+  ‹c›    单字符
+  …      任意文本
+  «C-…»  按住 Ctrl 和 _ 键
+  «Spc»  空格键
+  «CR»   回车键
+  «BS»   退格键
+
+  Similarly, other special keys are
+  written between « and ». All other
+  characters are meant to be typed
+  literally.
+
+  Note that spaces are made explicit
+  only when it is not obvious that a
+  space must be used (e.g., \«Spc», that
+  is, leader followed by space). Ditto
+  for «CR».
+
+  Labels:
+
+  N    Type in Normal mode
+  C    Type in Command mode
+  I    Type in Insert mode
+  V    Type in Visual mode
+  M    移动 (可以单独使用，也可以跟在
+       操作符后面)
+  T    Text object (use in Visual mode
+       or after an operator)
+  O    操作符 (在虚拟模式下, 或者后面跟
+       一个移动操作/text对象)
+  *    Acts on text under/after cursor
+}}}
+
+fzf.vim {{{1
+打开文件搜索列表         «C-p»         N
+显示所有buffer           \\            N
+搜索文件内容             «C-f» _       N
+显示所有书签             \m            N
+显示历史打开的文件       \,            N
+显示历史打开的命令       \.            N
+列出所有git管理的文件    GFiles        C
+列出所有git变化的文件    GFiles!       C
+列出颜色主题             Colors        C
+列出所有窗口             Windows       C
+列出历史搜索文本         History/      C
+列出Snippet列表          Snippets      C
+列出git提交历史          Commits       C
+当前buffer的git提交历史  BCommits      C
+列出所有映射的Commands   Commands      C
+列出所有映射的键位       Maps          C
+列出所有Help             Helptags      C
+切换文件类型             Filetypes     C
+加载的buffer中查找内容   Lines _       C
+在当前buffer中查找       BLines _      C
+以Tag查找                Tags _        C
+在当前buffer中查找Tag    BTags _       C
+定位命令输出             Locate _      C
+
+Coc.nvim {{{1
+显示Coc诊断信息          «Spc»a        N
+列出Coc所有插件          «Spc»e        N
+列出Coc所有命令          «Spc»c        N
+coc-bootmark {{{2
+添加书签                 \bm           N
+书签列表                 \bl           N
+}}}
+
+Mark {{{1
+打标签                   m‹nc›         N
+删除标签                 dm<nc>        N
+删除当前文件所有标签     m«Spc»        N
+跳转到对应标签的位置     '<nc>         N
+跳转到最后一个修改的位置 '.            N
+跳转之前的位置           ''            N
+跳转到下一个标签         ]'            N
+跳转到上一个标签         ['            N
+
+NERDTree {{{1
+打开目录树               T             N
+
+Git {{{1
+创建gitignore模板        FzfGitignore  C
+查看当前git仓库状态      Git           C
+把当前修改存盘并加到 Git Gwrite        C
+# 的暂存区
+放弃当前的修改，回到暂存 Gread         C
+# 区状态
+列出当前文件的修改历史   G blame       C
+比较当前和暂存区文件区别 Gvdiff        C
+将光标下的修改块和缓存区 \hp           N
+# 中的内容进行对比
+将光标下的修改块加入到暂 \hs           N
+# 存区中
+恢复暂存区中的内容       \hu           N
+
+Markdown {{{1
+打开MD文件预览           -             N
+# MarkdownPreview
+关闭MD文件预览           -             N
+# MarkdownPreviewStop
+
+nerdcommenter {{{1
+行内注释，也可用于行外   \cc           N
+去掉注释                 \cu           N
+切换注释与非注释         \c«Spc»       N
+加上“美观”的注释         \cb           N
+加上“性感”的注释         \cs           N
+
+wildfire.vim {{{1
+选择下一个最近的Text Obj «CR»          N
+选择上一个最近的Text Obj «BS»          N
+
+Apps {{{1
+打开备忘录               \?            N
+打开启动界面             \st           N
+打开文件浏览             \ra           N
+打开Undo树               L             N
+打开文件Structure        tt            N
