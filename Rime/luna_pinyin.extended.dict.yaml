@@ -28,9 +28,10 @@ import_tables:
   - luna_pinyin.sgplus2
   - luna_pinyin.chat
   - luna_pinyin.computer
-  - luna_pinyin.place
-  - luna_pinyin.shopping
-  - luna_pinyin.net
+  # - luna_pinyin.place
+  # - luna_pinyin.shopping
+  # - luna_pinyin.net
   - luna_pinyin.website
-  - luna_pinyin.poetry
+  # - luna_pinyin.poetry
+  - luna_pinyin.developer
 ...
