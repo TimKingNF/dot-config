@@ -1,0 +1,10 @@
+% docker-compose
+
+# docker-compose 后台启动
+docker-compose up -d
+
+# docker-compose 关闭服务器组
+docker-compose stop
+
+# docker-compose 关闭并移除
+docker-compose down

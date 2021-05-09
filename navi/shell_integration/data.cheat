@@ -1,7 +1,0 @@
-% shell data generate
-
-# 生成指定数量的随机数
-shuf -i <min>-<max> -n <count>
-
-# 批量生成日期范围, 时间递增 ( date: 2020-01-01 )
-for i in {<min>..<max>}; do echo $(date -I -d "<date> +$i days"); done

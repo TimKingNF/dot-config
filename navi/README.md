@@ -2,6 +2,16 @@
 
 https://github.com/denisidoro/navi
 
+## Install
+
+```bash
+# Linux
+bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install)
+
+# OSX
+brew install navi
+```
+
 ## 官方源
 
 https://github.com/denisidoro/cheats

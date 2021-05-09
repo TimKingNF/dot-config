@@ -80,3 +80,13 @@ Vim	vim
 阿里云	ali
 Devops	devops
 HBase	hbase
+Redis	redis
+Key	key
+NameNode	namenode
+DataNode	datanode
+JournalNode	journalnode
+ZKFC	zkfc
+HDFS	hdfs
+Redis	redis
+
+

@@ -1,0 +1,36 @@
+% Network interface
+
+# 设置网卡的ip地址和子网掩码
+ifconfig <interface> <ip> netmask <netmask>
+
+# 启动网卡
+ifconfig <interface> up
+
+# 关闭网卡
+ifconfig <interface> down
+
+# 查看当前路由
+route -n
+
+# 删除 destination=0.0.0.0 对应默认网关
+route del default gw <gateway_address>
+
+# 对目标地址添加网关 ( OSX )
+route add <dest_ip_address> <gateway_address>
+
+# 对目标地址添加网关 ( Linux )
+route add -host <dest_ip_address> gw <gateway_address>
+
+# 对目标网段添加网关 ( OSX )
+route add <subnet_ip_address>/<cnt> <gateway_address>
+
+# 跟踪路由
+; -w wait，只等待 1s 
+traceroute -w 1 <dest_ip_address>
+
+# 查看当前正在监听的 tcp 端口
+; -n 不显示主机名，只显示ip
+; -t 监听 tcp
+; -p 显示进程 pid
+; -l 只显示 listen 状态的端口
+netstat -ntpl

@@ -1,0 +1,4 @@
+% c
+
+# 将 .a 文件归档为静态链接库 .a 文件
+ar cr <archives.a> <elf.o>

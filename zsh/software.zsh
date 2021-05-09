@@ -27,4 +27,4 @@ export MANPAGER="vim -M +MANPAGER -"
 ###### Navi ######
 export NAVI_PATH=~/.config/navi
 # 使用快捷键 <C-g> 打开navi
-eval "$(navi widget zsh)"
+command -v navi >/dev/null && eval "$(navi widget zsh)"

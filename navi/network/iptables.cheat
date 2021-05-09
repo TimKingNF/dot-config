@@ -1,0 +1,4 @@
+% iptables
+
+# 查看iptables规则
+iptables -vnL

@@ -1,0 +1,135 @@
+% kafka
+
+# 创建一个topic
+<kafka_home>/bin/kafka-topics.sh --create --bootstrap-server <kafka_broker_list> --replication-factor <replicas> \
+    --partitions <partitions> --topic <topic>
+
+# 查看topic list
+<kafka_home>/bin/kafka-topics.sh --list --bootstrap-server <kafka_broker_list>
+
+# 删除topic
+<kafka_home>/bin/kafka-topics.sh --bootstrap-server <kafka_broker_list> --delete --topic <topic>
+
+# 查看单个topic的详细信息
+<kafka_home>/bin/kafka-topics.sh --bootstrap-server <kafka_broker_list> --describe --topic <topic_name>
+
+# 查看 topic 的消息总数
+; 查看主题的最早位移和最新位移
+; TODO：做一下合并
+<kafka_home>/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list <kafka_broker_list> --time -2 \
+    --topic <topic>
+<kafka_home>/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list <kafka_broker_list> --time -1 \
+    --topic <topic>
+
+# 增加某个topic的分区数
+<kafka_home>/bin/kafka-topics.sh --bootstrap-server <kafka_broker_list> --alter --topic <topic_name> --partitions \
+    <partitions>
+
+# 修改 broker cluster-wide 范围参数
+<kafka_home>/bin/kafka-configs.sh --bootstrap-server <kafka_broker_list> --entity-type brokers --entity-default \
+    --alter --add-config 
+
+# 查看 broker cluster-wide 范围参数
+<kafka_home>/bin/kafka-configs.sh --bootstrap-server <kafka_broker_list> --entity-type brokers --entity-default \
+    --describe
+
+# 删除 broker cluster-wide 范围参数
+<kafka_home>/bin/kafka-configs.sh --bootstrap-server <kafka_broker_list> --entity-type brokers --entity-default --alter \
+    --delete-config 
+
+# 修改 broker per-broker 范围参数
+<kafka_home>/bin/kafka-configs.sh --bootstrap-server <kafka_broker_list> --entity-type brokers --entity-name <broker_id> \
+    --alter --add-config 
+
+# 查看 broker per-broker 范围参数
+<kafka_home>/bin/kafka-configs.sh --bootstrap-server <kafka_broker_list> --entity-type brokers --entity-name <broker_id> \
+    --describe
+
+# 删除 broker per-broker 范围参数
+<kafka_home>/bin/kafka-configs.sh --bootstrap-server <kafka_broker_list> --entity-type brokers --entity-name <broker_id> \
+    --alter --delete-config 
+
+# 修改 topic 级别的参数
+; 后面跟要配置的参数，使用逗号分割
+<kafka_home>/bin/kafka-configs.sh --zookeeper <zk_addr> --entity-type topics --entity-name <topic_name> --alter \
+    --add-config 
+
+# broker 限速
+; rate 字节为单位
+<kafka_home>/bin/kafka-configs.sh --zookeeper <zk_addr> --alter --add-config \
+    'leader.replication.throttled.rate=<rate>,follower.replication.throttled.rate=<rate>' \
+    --entity-type brokers --entity-name <broker_id>
+
+# topic replica 限速
+<kafka_home>/bin/kafka-configs.sh --zookeeper <zk_addr> --alter --add-config \
+    'leader.replication.throttled.replicas=*,follower.replication.throttled.replicas=*' \
+    --entity-type topics --entity-name <topic>
+
+# kafka cli 发送消息
+; --request-required-acks -1 生产者参数 acks 
+; --producer-property compression.type=lz4  启用了 LZ4 的压缩算法
+<kafka_home>/bin/kafka-console-producer.sh --broker-list <kafka_broker_list> --topic <topic>
+
+# kafka cli 从最早位移开始消费消息
+<kafka_home>/bin/kafka-console-consumer.sh --bootstrap-server <kafka_broker_list> --group <group> \
+    --topic <topic> --from-beginning --consumer-property enable.auto.commit=false
+
+# kafka cli 从指定位移开始消费消息
+<kafka_home>/bin/kafka-console-consumer.sh --bootstrap-server <kafka_broker_list> --group <group> \
+    --topic <topic> --offset <offset> --consumer-property enable.auto.commit=false
+
+# kafka cli 消费 __consumer_offsets
+<kafka_home>/bin/kafka-console-consumer.sh --bootstrap-server <kafka_broker_list> --topic __consumer_offsets --formatter \
+    "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter"
+
+# 查看kafka 的文件
+; 默认查看的是消息批次
+; --deep-iteration 查看每一条消息
+; --print-data-log 查看消息中的数据
+<kafka_home>/bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files 
+
+# 测试生产者性能
+; 向指定主题发送了 1 千万条消息，每条消息大小是 1KB, acks是全部，使用lz4压缩
+<kafka_home>/bin/kafka-producer-perf-test.sh --topic <topic> --num-records 10000000 --throughput -1 \
+    --record-size 1024 --producer-props bootstrap.servers=<kafka_broker_list> acks=-1 linger.ms=2000 compression.type=lz4
+
+# 测试消费者性能
+<kafka_home>/bin/kafka-consumer-perf-test.sh --broker-list <kafka_broker_list> --messages 10000000 --topic <topic>
+
+# 查询消费者组位移
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --describe --group <group>
+
+# 设置消费者组位移为 earliest
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --group <group> --reset-offsets \
+    --all-topics --to-earliest –execute
+
+# 设置消费者组位移为 latest
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --group <group> --reset-offsets \
+    --all-topics --to-latest --execute
+
+# 设置消费者组位移为 current
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --group <group> --reset-offsets \
+    --all-topics --to-current --execute
+
+# 设置消费者组位移为指定位移
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --group <group> --reset-offsets \
+    --all-topics --to-offset <offset> --execute
+
+# 设置消费者组位移为 shift-by N
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --group <group> --reset-offsets \
+    --shift-by <offset_N> --execute
+
+# 设置消费者位移为 to-datetime
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --group <group> --reset-offsets \
+    --to-datetime <datetime> --execute
+
+# 设置消费者位移为 by-duration
+<kafka_home>/bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_list> --group <group> --reset-offsets \
+    --by-duration <duration> --execute
+
+
+$ kafka_home: echo -e "$KAFKA_HOME\n"
+$ zk_addr: echo -e "$ZK_ADDR\n"
+$ kafka_broker_list: echo -e "$KAFKA_BROKER_LIST\n"
+$ datetime: echo -e "2019-06-20T20:00:00.000\n"
+$ duration: echo -e "PT0H30M0S\n"

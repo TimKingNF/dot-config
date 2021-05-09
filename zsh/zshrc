@@ -77,7 +77,23 @@ ENABLE_CORRECTION="true"
 # Configure history stamp format
 HIST_STAMPS="yyyy-mm-dd"
 
-source $ZSH/oh-my-zsh.sh
+# shell integration with iterm2
+[[ -f "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+
+###### oh-my-zsh ######
+
+if [[ ! -f "$ZSH/oh-my-zsh.sh" ]]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
+
+[[ -f "$ZSH/oh-my-zsh.sh" ]] && source $ZSH/oh-my-zsh.sh
+
+
+###### powerlevel10k ######
+if [[ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]]; then
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+    ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+fi
 
 
 ###### ZPlug: Plugin Manager ######
@@ -97,9 +113,7 @@ if [[ ! -d "${ZPLUG_HOME}" ]]; then
   export ZPLUG_HOME=~/.zplug
 fi
 
-if [[ -d "${ZPLUG_HOME}" ]]; then
-  source "${ZPLUG_HOME}/init.zsh"
-fi
+[[ -d "${ZPLUG_HOME}" ]] && source "${ZPLUG_HOME}/init.zsh"
 
 zplug 'plugins/git', from:oh-my-zsh, if:'which git'
 zplug romkatv/powerlevel10k, as:theme, depth:1
@@ -121,29 +135,13 @@ zplug load
 
 
 ###### Local custom plugins ######
-for item in $(ls -1 ${HOME}/.config/profile.d/*.plugin.zsh); do
+for item in $(ls -1 ${HOME}/.config/zsh/profile.d/*.plugin.zsh); do
   [ -e "${item}" ] && source "${item}"
 done
 
 
 ###### Software configuration ######
 [[ ! -f ~/.config/zsh/software.zsh ]] || source ~/.config/zsh/software.zsh
-
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/alen/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/alen/opt/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/alen/opt/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/alen/opt/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 
 ###### Powerlevel10k configuration ######
@@ -153,6 +151,4 @@ unset __conda_setup
 
 ###### User profiles ######
 [[ ! -f ~/.config/zsh/personal.zsh ]] || source ~/.config/zsh/personal.zsh
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 

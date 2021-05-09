@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 该脚本用于实现一个基于 shell 的回收站
+# 你也可以通过安装 https://github.com/kaelzhang/shell-safe-rm 实现类似效果
+
 #--------#
 # DEBUG  #
 #--------#{{{
@@ -121,17 +124,20 @@ _remove_(){
 #------------#{{{
 _list_(){
     _check_empty_
-
+    
+    IFS_OLD=$IFS  #將当前值保存
+    IFS=$'\n'
     for name in $(ls -a $_TINFO_) ; do
         if [ $name == "." ] || [ $name == ".." ]; then 
             continue
         fi
-        local _filename_="$_TINFO_/$name" 
+        local _filename_="$_TINFO_/$name"
         local _file_=$(awk -F = '/^Path=/{print $2}' "$_filename_")
         local _date_=$(awk -F = '/^DeletionDate=/{sub("T"," ",$2); print $2}' "$_filename_")
 
         _msg_ "List [$_date_] '$_file_'"
     done
+    IFS=$IFS_OLD
 }
 #}}}
 
@@ -143,23 +149,29 @@ _clean_(){
 
     read -p $'clear sure?\n[Input 'y' or 'Y' to confirm. && Input 'n' to cancel.]' confirm
     if [ $confirm == 'y' ] || [ $confirm == 'Y' ]; then
-    local tinfo=""
-    local tfiles=""
-    for name in $(ls -a $_TINFO_) ; do
-        if [ $name == "." ] || [ $name == ".." ]; then 
-            continue
-        fi
-        local _filename_="" 
+        local tinfo=""
+        local tfiles=""
+        IFS_OLD=$IFS  #將当前值保存
+        IFS=$'\n'
+        for name in $(ls -a $_TINFO_) ; do
+            if [ $name == "." ] || [ $name == ".." ]; then 
+                continue
+            fi
+            local _filename_=${name%.*}
 
-        tinfo+=" $_TINFO_/$name"
-        tfiles+=" $_TFILES_/$name"
-    done
+            tinfo+=" \"$_TINFO_/$name\""
+            tfiles+=" \"$_TFILES_/$_filename_\""
+        done
+        IFS=$IFS_OLD
 
-    _msg_ "Clean [INFO]"
-    rm -rf -- $tinfo
+        _msg_ "Clean [INFO]"
+        # echo "$tinfo"
+        # echo "rm -rf -- $tinfo"
+        rm -rf -- $tinfo
 
-    _msg_ "Clean [FILE]"
-    rm -rf -- $tfiles
+        _msg_ "Clean [FILE]"
+        # echo "rm -rf -- $tfiles"
+        rm -rf -- $tfiles
     fi
 }
 #}}}
@@ -232,15 +244,15 @@ _size_(){
 # Check Empty #
 #-------------#{{{
 _check_empty_() {
-    local size=0
+    local let size=0
 
     for name in $(ls -a $_TINFO_) ; do
     if [ $name == "." ] || [ $name == ".." ]; then 
         continue
     fi
-    let size++
+    (( size++ ))
     done
-    [ $size > 0 ] || _er_ "Trash [EMPTY]"
+    [[ $size > 0 ]] || echo "Trash [EMPTY]"
 }
 #}}}
 

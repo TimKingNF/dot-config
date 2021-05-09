@@ -1,4 +1,6 @@
-% yum
+% yum ( CentOS, RedHat )
+
+; rpm 是 yum 下载的软件安装包格式
 
 # List all available packages
 yum list available
@@ -53,3 +55,12 @@ yum repolist
 
 # 查看 yum 包的安装目录
 rpm -ql <package-name>
+
+# rpm 查询已安装软件包
+rpm -q <package-name>
+
+# rpm 安装软件包
+rpm -i <package-path>
+
+# rpm 卸载软件包
+rpm -e <package-name>

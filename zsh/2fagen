@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+
+# 该脚本实现基于本地存储的密钥生成 2fa 的验证码，完成 2 部验证
+
+# 脚本名字
+_name_=${0##*/}
+
+# 存放密钥的路径
+_KEYPATH_=$HOME/.2fagen
+
+# sshenc path
+_SSHENC_=$HOME/.config/utils/sshenc.sh
+
+# encrypted public key
+_public_key_=$HOME/.ssh/id_rsa.pub
+
+
+_msg_(){ ( >&2 printf "%s: %b\n" "${_name_^}" "$1" ) ;}
+_er_(){ ( >&2 printf "%s: %b\n" "${_name_^}" "$1" ) ; exit 2 ;}
+_mk_dir_(){ [ -d "$_KEYPATH_" ] || mkdir -p "$_KEYPATH_"; }
+
+_mk_rsa_() {
+    ssh-keygen -t rsa -b 4096 -P '' -f ${_public_key_%.pub}
+}
+
+_help_(){
+cat <<- HELP
+${_name_^^} 2fa verify code generator
+
+$_name_ [OPTS] [ARGUMENTS]
+
+OPTS :
+  -h : Display this help text and exit
+  -a : add 2fa key, it will be encrypted and saved by your ssh pub-key 
+    ARGUMENTS: [TITLE] [USERNAME] [2FA-KEY]
+  -s : decrypt to get 2fa key
+    ARGUMENTS: [TITLE] [USERNAME]
+  -g : get 2fa password from [title]
+    ARGUMENTS: [TITLE] [USERNAME]
+HELP
+
+exit 0
+}
+
+_add_key_(){
+    IFS=' ' read -r -a array <<< ${_args_[@]:$F}  # 读取参数
+    local size=${#array[@]}  # 读取数组长度
+
+    [ $size != 3 ] && _er_ "invalid arguments"
+    
+    local username=${array[1]}
+    local encrypted_file="$_KEYPATH_/${array[0]}-${username}"  # 加密之后的文件名
+    local key=${array[2]}
+
+    _mk_dir_
+    
+    # 创建一个临时文件保存 key
+    local plain_file="$_KEYPATH_/$(date "+%s").txt"
+    echo $key > $plain_file
+    
+    # 判断是否存在 ~/.ssh/id_rsa.pub, 否则生成一对密钥
+    [ -e $_public_key_ ] || _mk_rsa_
+    
+    # 对密钥使用 公钥进行加密
+    eval "$_SSHENC_ -p $_public_key_ < $plain_file > $encrypted_file"
+    /bin/rm -r -f $plain_file  # 删除原来的文件
+    
+    # 打印消息
+    _msg_ "add encrypted key in $encrypted_file"
+}
+
+_decrypt_(){
+    IFS=' ' read -r -a array <<< ${_args_[@]:$F}  # 读取参数
+    local size=${#array[@]}  # 读取数组长度
+
+    [ $size != 2 ] && _er_ "invalid arguments"
+    
+    local username=${array[1]}
+    local encrypted_file="$_KEYPATH_/${array[0]}-${username}"  # 加密之后的文件名
+    [ -e $encrypted_file ] || _er_ "$encrypted_file doesn't exist"
+    
+    _msg_ "decrypt key $encrypted_file"
+    eval "$_SSHENC_ -s ${_public_key_%.pub} < $encrypted_file"
+}
+
+_get_pass_(){
+    IFS=' ' read -r -a array <<< ${_args_[@]:$F}  # 读取参数
+    local size=${#array[@]}  # 读取数组长度
+
+    [ $size != 2 ] && _er_ "invalid arguments"
+    
+    local username=${array[1]}
+    local encrypted_file="$_KEYPATH_/${array[0]}-${username}"  # 加密之后的文件名
+    [ -e $encrypted_file ] || _er_ "$encrypted_file doesn't exist"
+
+    local key=`$_SSHENC_ -s ${_public_key_%.pub} < $encrypted_file`
+    echo `oathtool --totp --base32 "$key"`
+}
+
+_main_(){
+while getopts "ahsg" OPT ; do
+    case "$OPT" in
+        h )
+            _help_
+            ;;
+        a ) 
+            _ADD_=true
+            ;;
+        s )
+            _DECRYPT_=true
+            ;;
+        g )
+            _GET_=true
+            ;;
+        * )
+            _er_ "invalid option -- '$OPTARG'\nTry '${_name_} -h' for more information"
+            ;;
+    esac
+
+    F=$((OPTIND-1))  # 加上参数，后续好移除
+done
+}
+
+
+for i in "$@"; { _args_+=( "$i" ) ;}
+_main_ $@
+
+
+# 校验是否存在 oathtool
+command -v oathtool > /dev/null || _er_ "$name require oath-toolkit !"
+
+# 执行具体操作
+[ "$_ADD_" ]     && _add_key_  || true
+[ "$_GET_" ]     && _get_pass_ || true
+[ "$_DECRYPT_" ] && _decrypt_  || true

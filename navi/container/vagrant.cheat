@@ -1,0 +1,10 @@
+% vagrant
+
+# 初始化虚拟机
+vagrant init .
+
+# 启动虚拟机
+vagrant up
+
+# 关闭虚拟机
+vagrant halt

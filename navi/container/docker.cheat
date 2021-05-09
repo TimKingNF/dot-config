@@ -1,0 +1,7 @@
+% docker
+
+# docker log 监听
+docker logs -f <container>
+
+# 进入某个容器
+docker exec -it <container> sh

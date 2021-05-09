@@ -1,0 +1,4 @@
+% disk device manager
+
+# 把一个块设备，制作为光盘镜像
+dd if=<device> of=<path>
