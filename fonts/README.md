@@ -8,8 +8,6 @@
 
 下载解压后，只需安装 sarasa-gothic-ttc-0.10.2.7z 里面的 sarasa-regular.ttc 或安装 sarasa-gothic-ttf-0.10.2.7z 里面的 sarasa-term-sc-regular.ttf 即可。
 
-## [Hack Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack)
+## [Hack Nerd Font](https://www.nerdfonts.com/font-downloads)
 
 用于显示特殊字符的字体
-
-## [HanaMin]
