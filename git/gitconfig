@@ -20,11 +20,11 @@
     helper = store
 
 ### Proxy
-[http "https://github.com"]
-    proxy = socks5://127.0.0.1:7890
-
-[https "https://github.com"]
-    proxy = socks5://127.0.0.1:7890
+# [http "https://github.com"]
+#     proxy = socks5://127.0.0.1:7890
+# 
+# [https "https://github.com"]
+#     proxy = socks5://127.0.0.1:7890
 
 [color "diff"]
     meta = yellow bold

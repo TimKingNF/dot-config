@@ -28,9 +28,10 @@ link-rime:
 link-git:
 	ln -sf ~/.config/git/gitconfig ~/.gitconfig
 
+link-zsh: SHELL:=/bin/bash
 link-zsh:
 	ln -sf ~/.config/zsh/p10k.zsh ~/.p10k.zsh
-	[[ ! -f ./zsh/personal.zsh ]] && touch ./zsh/personal.zsh
+	if [ ! -e ./zsh/personal.zsh ]; then touch ./zsh/personal.zsh; fi
 	ln -sf ~/.config/zsh/zshrc ~/.zshrc
 
 link-nvim:
