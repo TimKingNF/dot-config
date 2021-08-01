@@ -19,9 +19,8 @@ LSCOLORS='CxfxcxdxbxegedabagGxGx'
 ###### Command enhancements aliases ######
 
 alias edit='nvim'
-alias code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 
-alias ls='ls -GFh'
+alias ls='ls -GFh --color=auto'
 alias ll="ls -l"
 # 只显示隐藏文件
 alias l.='ls -d .'
@@ -57,5 +56,14 @@ if [[ $CUSTOM_OS = "osx" ]]; then
 alias date="gdate"  # use gnu date replace date
 alias clearcp='printf "\e]1337;ClearCapturedOutput\e\\"'  # 告诉iterm2清理 CapturedOutput
 alias sed="gsed"  # use gnu sed replace osx sed
+
+fi
+
+###### WSL alias ######
+
+if [[ $CUSTOM_OS = "wsl" ]]; then
+
+alias wincopy="clip.exe"
+alias winpaste="powershell.exe Get-Clipboard"
 
 fi

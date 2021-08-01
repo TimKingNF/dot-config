@@ -166,12 +166,12 @@ _clean_(){
 
         _msg_ "Clean [INFO]"
         # echo "$tinfo"
-        # echo "rm -rf -- $tinfo"
-        rm -rf -- $tinfo
+        # echo "/bin/rm -rf -- $tinfo"
+        eval "/bin/rm -rf -- $tinfo"
 
         _msg_ "Clean [FILE]"
-        # echo "rm -rf -- $tfiles"
-        rm -rf -- $tfiles
+        # echo "/bin/rm -rf -- $tfiles"
+        eval "/bin/rm -rf -- $tfiles"
     fi
 }
 #}}}

@@ -1,6 +1,6 @@
 [user]
-    email = timking
-    name = timking.nf@foxmail.com
+    email = timking.nf@foxmail.com
+    name = timking
 
 [core]
     editor = nvim
@@ -22,7 +22,7 @@
 ### Proxy
 # [http "https://github.com"]
 #     proxy = socks5://127.0.0.1:7890
-# 
+#
 # [https "https://github.com"]
 #     proxy = socks5://127.0.0.1:7890
 

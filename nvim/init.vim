@@ -12,7 +12,7 @@
 " :h 去掉路径的最后部分
 let g:nvim_home=expand('<sfile>:p:h')
 " 是否使用自定义的状态栏
-let g:custom_statusline = 0 
+let g:custom_statusline = 0
 " 记录上一个buffer的id
 let g:prev_buffer_nr = 0
 
