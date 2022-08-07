@@ -1,9 +1,7 @@
 " coc 扩展，执行 :CocInstall 安装
-" * coc 市场，用于搜索 :CocList marketplace 
-" * coc-bookmark 书签管理器
+" * coc 市场，用于搜索 :CocList marketplace
 let g:coc_global_extensions = [ 
   \ 'coc-marketplace',
-  \ 'coc-bookmark',
 \]
 
 

@@ -1,0 +1,2 @@
+GOPROXY=https://proxy.golang.com.cn,direct
+GO111MODULE=on

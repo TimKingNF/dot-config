@@ -116,3 +116,32 @@ extract() {
 makefile_1mb() { mkfile 1m ./1MB.dat ; }           # makefile_1mb:      Creates a file of 1mb size (all zeros)
 makefile_5mb() { mkfile 5m ./5MB.dat ; }           # makefile_5mb:      Creates a file of 5mb size (all zeros)
 makefile_10mb() { mkfile 10m ./10MB.dat ; }        # makefile_10mb:     Creates a file of 10mb size (all zeros)
+
+
+### WSL Enhance
+
+if [[ $CUSTOM_OS = "wsl" ]]; then
+
+dns-clean() {
+  sudo /usr/bin/rm -rf /etc/resolv.conf
+  /mnt/c/Windows/system32/wsl.exe --shutdown
+}
+
+vpn-dns () {
+  /mnt/c/Windows/system32/ipconfig.exe /all \
+  | grep -A 50 'VPN' \
+  | grep --color=auto "DNS Servers" \
+  | cut -d ":" -f 2 \
+  | grep --color=auto -e '^ [0-9]' \
+  | sed 's/^/nameserver/' \
+  | sudo tee /etc/resolv.conf > /dev/null
+  /mnt/c/Windows/system32/wsl.exe --shutdown
+}
+
+dns-restore () {
+  sudo /usr/bin/rm -rf /etc/resolv.conf
+  sudo cp /etc/resolv.conf.bak /etc/resolv.conf
+  /mnt/c/Windows/system32/wsl.exe --shutdown
+}
+
+fi

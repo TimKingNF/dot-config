@@ -59,9 +59,9 @@ alt & l::
 Return
 
 
-!^1::Send {Volume_Mute} ; alt+ctrl+1 声音开关
-!^2::Send {Volume_Down} ; alt+ctrl+2 音量减小
-!^3::Send {Volume_Up}; alt+ctrl+3 音量增加
+; !^1::Send {Volume_Mute} ; alt+ctrl+1 声音开关
+; !^2::Send {Volume_Down} ; alt+ctrl+2 音量减小
+; !^3::Send {Volume_Up}; alt+ctrl+3 音量增加
 ^h::Send {Home}  ;ctrl+h 触发 Home
 ^l::Send {End}  ;ctrl+l 触发 End
 !.::Send {MButton}  ;alt+. 触发 鼠标中键功能
