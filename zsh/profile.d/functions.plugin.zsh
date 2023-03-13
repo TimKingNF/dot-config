@@ -117,6 +117,66 @@ makefile_1mb() { mkfile 1m ./1MB.dat ; }           # makefile_1mb:      Creates 
 makefile_5mb() { mkfile 5m ./5MB.dat ; }           # makefile_5mb:      Creates a file of 5mb size (all zeros)
 makefile_10mb() { mkfile 10m ./10MB.dat ; }        # makefile_10mb:     Creates a file of 10mb size (all zeros)
 
+treepid() {  # 获取进程及所有子进程
+    local pid sep opts
+    opts=$(getopt -q -o s:,p: -l sep:,pid: -- "$@") || return 1
+    eval set -- "$opts"
+    while [[ true ]]; do
+        case $1 in
+            -s|--sep )
+                sep=$2
+                shift 2
+                ;;
+            -p|--pid )
+                pid=$2
+                shift 2
+                ;;
+            -- )
+                shift
+                break
+                ;;
+            * )
+                echo "Invalid usage" >&2
+                return 1
+                ;;
+        esac
+    done
+    sep=${sep:-' '}
+    pid=${pid:-$1}
+    if ! [[ $pid ]]; then
+        return 1
+    fi
+
+    ps -eo ppid,pid --no-headers | awk -vroot=$pid -vsep="$sep" '
+        function dfs(u) {
+            if (pids)
+                pids = pids sep u;
+            else
+                pids = u;
+            if (u in edges)
+                for (v in edges[u])
+                    dfs(v);
+        }
+        {
+            edges[$1][$2] = 1;
+            if ($2 == root)
+                root_isalive = 1;
+        }
+        END {
+            if (root_isalive)
+                dfs(root);
+            if (pids)
+                print pids;
+        }'
+}
+
+mempid() { # 获取进程及子进程所有内存总和
+  # 将所有 PID 拼接成逗号分隔的字符串
+  pids=$(treepid $1 -s',')
+  # 使用 ps 命令获取进程信息并计算总物理内存使用情况
+  ps -p $pids -o rss= | awk '{sum+=$1} END {print sum}'
+}
+
 
 ### WSL Enhance
 

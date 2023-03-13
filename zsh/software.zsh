@@ -28,3 +28,19 @@ export MANPAGER="vim -M +MANPAGER -"
 export NAVI_PATH=~/.config/navi
 # 使用快捷键 <C-g> 打开navi
 command -v navi >/dev/null && eval "$(navi widget zsh)"
+
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+
+# NVM nodejs包管理工具
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# Golang
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH

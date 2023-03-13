@@ -6,7 +6,8 @@
     editor = nvim
     whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = ~/.config/git/gitignore
-	autocrlf = input
+    # 提交时转换为 LF，检出时不做转换
+    autocrlf = input
 
 [filter "lfs"]
     clean = git-lfs clean -- %f

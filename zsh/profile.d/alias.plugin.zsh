@@ -23,7 +23,7 @@ alias edit='nvim'
 alias ls='ls -GFh --color=auto'
 alias ll="ls -l"
 # 只显示隐藏文件
-alias l.='ls -d .'
+alias l.='ls -d .'
 # 复制时保留限和修改时间
 alias cp='cp -v'
 alias mv='mv -v'
